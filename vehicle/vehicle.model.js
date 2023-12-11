@@ -13,7 +13,7 @@ const vehicleSchema = new mongoose.Schema(
 
     model: {
       type: Number,
-      min: 2010,
+      min: 2000,
       max: 2100,
     },
 
