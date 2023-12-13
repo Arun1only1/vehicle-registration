@@ -2,24 +2,6 @@ import { Vehicle } from "./vehicle.model.js";
 import { vehicleValidationSchema } from "./vehicle.validation.schema.js";
 import { checkMongoIdValidity } from "../utils/mongo.id.validity.js";
 
-// add vehicle
-export const addVehicle = async (req, res) => {
-  //  extract new vehicle data  from req.body
-  const newVehicle = req.body;
-
-  // validate newVehicle
-  try {
-    await vehicleValidationSchema.validate(newVehicle);
-  } catch (error) {
-    return res.status(400).send({ message: error.message });
-  }
-
-  //   create vehicle
-  await Vehicle.create(newVehicle);
-
-  return res.status(200).send({ message: "Vehicle added successfully." });
-};
-
 //  vehicle details by id
 export const getVehicleDetails = async (req, res) => {
   // extract id from req.params
@@ -117,4 +99,29 @@ export const updateVehicle = async (req, res) => {
 
   // send appropriate response
   return res.status(200).send({ message: "Vehicle is updated successfully." });
+};
+
+//  validates vehicle data
+export const validateVehicleData = async (req, res, next) => {
+  // extract  vehicle data from req.body
+  const newVehicleData = req.body;
+
+  // validate vehicle data
+  try {
+    await vehicleValidationSchema.validate(newVehicleData);
+  } catch (error) {
+    // if validation fails, throw error
+    return res.status(400).send({ message: error.message });
+  }
+
+  next();
+};
+
+// add vehicle to db
+export const addVehicle = async (req, res) => {
+  const newVehicleData = req.body;
+
+  await Vehicle.create(newVehicleData);
+
+  return res.status(201).send({ message: "Vehicle added." });
 };

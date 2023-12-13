@@ -4,12 +4,13 @@ import {
   deleteVehicle,
   getVehicleDetails,
   updateVehicle,
+  validateVehicleData,
 } from "./vehicle.service.js";
 
 const router = express.Router();
 
 // add vehicle
-router.post("/add", addVehicle);
+router.post("/add", validateVehicleData, addVehicle);
 
 // get vehicle
 router.get("/details/:id", getVehicleDetails);
